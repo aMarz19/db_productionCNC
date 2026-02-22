@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ERP Sparepart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h2>ERP Sparepart System</h2>
+    <button id="authButton" onclick="openLogin()">Login</button>
+</header>
+
+<div class="container">
+
+    <div class="form-box">
+        <input type="date" id="tanggal">
+        <input type="text" id="namaPart" placeholder="Nama Part">
+        <input type="number" id="jumlah" placeholder="Jumlah">
+        <button onclick="addOrder()">Simpan</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal</th>
+                <th>Nama Part</th>
+                <th>Jumlah</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="orderTable"></tbody>
+    </table>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLogin()">×</span>
+        <h3>Login</h3>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
