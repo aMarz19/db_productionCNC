@@ -9,7 +9,7 @@ const path = require("path");
 const app = express();
 
 // ================= CONFIG =================
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const TELEGRAM_TOKEN = "8412680337:AAF0nBJ3LVbb1ib74MmuIG3rHEdd23XJCpk"; // ganti dengan token valid
 const TELEGRAM_CHAT_ID = "7335465924"; // ganti dengan chat id valid
