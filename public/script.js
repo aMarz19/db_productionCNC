@@ -17,36 +17,39 @@ document.addEventListener("DOMContentLoaded", () => {
     loadData();
 });
 
+let lastId = 0; // ID terakhir yang sudah ada di tabel
+
 async function loadData() {
+    try {
+        const { data, error } = await supabaseClient
+            .from("orders")
+            .select("*")
+            .gt("id", lastId) // hanya ambil data baru
+            .order("id", { ascending: true }); // ascending supaya muncul di bawah
 
-    const { data, error } = await supabaseClient
-        .from("orders")
-        .select("*")
-        .order("id", { ascending: false });
+        if (error) throw error;
 
-    if (error) {
-        console.error(error.message);
-        return;
+        const tableBody = document.getElementById("orderTable");
+
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${tableBody.rows.length + 1}</td>
+                <td>${row.tanggal}</td>
+                <td>${row.nama_part}</td>
+                <td>${row.jumlah}</td>
+                <td>
+                    <button onclick="hapusData(${row.id})">Hapus</button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+
+            lastId = row.id; // update lastId supaya next fetch lebih baru
+        });
+
+    } catch (err) {
+        console.error(err.message);
     }
-
-    const tableBody = document.getElementById("orderTable");
-    tableBody.innerHTML = "";
-
-    data.forEach(row => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-        <td>${tableBody.rows.length + 1}</td>
-        <td>${row.tanggal}</td>
-        <td>${row.nama_part}</td>
-        <td>${row.jumlah}</td>
-        <td>
-            <button onclick="hapusData(${row.id})">Hapus</button>
-        </td>
-    `;
-
-        tableBody.appendChild(tr);
-    });
 }
 
 // ===============================
