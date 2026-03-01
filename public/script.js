@@ -35,7 +35,7 @@ async function loadData() {
     data.forEach(row => {
         tableBody.innerHTML += `
             <tr>
-                <td>${row.id}</td>
+                <td>${data.indexOf(row) + 1}</td>
                 <td>${row.tanggal}</td>
                 <td>${row.nama_part}</td>
                 <td>${row.jumlah}</td>
