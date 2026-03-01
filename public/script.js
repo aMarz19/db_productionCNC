@@ -71,8 +71,8 @@ async function addOrder() {
         ]);
 
     if (error) {
-        console.error(error.message);
-        alert("Gagal simpan");
+        console.error("ERROR DETAIL:", error);
+        alert("Gagal simpan: " + error.message);
         return;
     }
 
