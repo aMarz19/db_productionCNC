@@ -29,7 +29,7 @@ async function loadData() {
         return;
     }
 
-    const tableBody = document.getElementById("tableBody");
+    const tableBody = document.getElementById("orderTable");
     tableBody.innerHTML = "";
 
     data.forEach(row => {
