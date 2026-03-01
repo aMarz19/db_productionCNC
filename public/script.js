@@ -33,17 +33,19 @@ async function loadData() {
     tableBody.innerHTML = "";
 
     data.forEach(row => {
-        tableBody.innerHTML += `
-            <tr>
-                <td>${tableBody.rows.length + 1}</td>
-                <td>${row.tanggal}</td>
-                <td>${row.nama_part}</td>
-                <td>${row.jumlah}</td>
-                <td>
-                    <button onclick="hapusData(${row.id})">Hapus</button>
-                </td>
-            </tr>
-        `;
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+        <td>${tableBody.rows.length + 1}</td>
+        <td>${row.tanggal}</td>
+        <td>${row.nama_part}</td>
+        <td>${row.jumlah}</td>
+        <td>
+            <button onclick="hapusData(${row.id})">Hapus</button>
+        </td>
+    `;
+
+        tableBody.appendChild(tr);
     });
 }
 
