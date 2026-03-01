@@ -56,15 +56,10 @@ async function addOrder() {
     const nama_part = document.getElementById("namaPart").value;
     const jumlah = document.getElementById("jumlah").value;
 
-    if (!tanggal || !nama_part || !jumlah) {
-        alert("Semua field harus diisi");
-        return;
-    }
-
     const { error } = await supabaseClient
         .from("orders")
         .insert([
-            {   
+            {
                 tanggal: tanggal,
                 nama_part: nama_part,
                 jumlah: parseInt(jumlah)
@@ -72,10 +67,25 @@ async function addOrder() {
         ]);
 
     if (error) {
-        console.error("ERROR DETAIL:", error);
         alert("Gagal simpan: " + error.message);
         return;
     }
+
+    // 🔥 PANGGIL EDGE FUNCTION
+    await fetch(
+        "https://laocjpezzthwshbxbpmw.functions.supabase.co/tele_bot",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                tanggal: tanggal,
+                nama_part: nama_part,
+                jumlah: jumlah
+            })
+        }
+    );
 
     loadData();
 }
