@@ -5,7 +5,7 @@ const SUPABASE_URL = "https://laocjpezzthwshbxbpmw.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxhb2NqcGV6enRod3NoYnhicG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjY2MjcsImV4cCI6MjA4Nzk0MjYyN30.3Dpk5dT8aqWzfpEoo8omXmUPBm7_6kMgOk0wkoOFJaY";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-// const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 // ================= ELEMENT =================
 const modal = document.getElementById("loginModal");
