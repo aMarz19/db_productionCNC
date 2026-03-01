@@ -72,20 +72,19 @@ async function addOrder() {
     }
 
     // 🔥 PANGGIL EDGE FUNCTION
-    await fetch(
-        "https://laocjpezzthwshbxbpmw.functions.supabase.co/tele_bot",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                tanggal: tanggal,
-                nama_part: nama_part,
-                jumlah: jumlah
-            })
-        }
-    );
+    await fetch("https://laocjpezzthwshbxbpmw.supabase.co/functions/v1/tele_bot", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "apikey": `${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+            tanggal,
+            nama_part: nama_part,
+            jumlah
+        })
+    }).then(response => response.json())
 
     loadData();
 }
