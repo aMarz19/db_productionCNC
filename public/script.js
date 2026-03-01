@@ -1,12 +1,20 @@
-// ================= script.js =================
-console.log("SCRIPT TERLOAD");
+console.log("SCRIPT TERLOAD - SUPABASE MODE");
+
+// ================= CONFIG =================
+const SUPABASE_URL = "https://PROJECT_ID.supabase.co";
+const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY";
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
 // ================= ELEMENT =================
 const modal = document.getElementById("loginModal");
 const authButton = document.getElementById("authButton");
 const orderTable = document.getElementById("orderTable");
 
-// ================= MODAL LOGIN =================
+// ================= MODAL =================
 function openLogin() {
     modal.style.display = "flex";
 }
@@ -17,110 +25,94 @@ function closeLogin() {
 
 // ================= LOGIN =================
 async function login() {
-    const username = document.getElementById("username").value;
+    const email = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    if (!username || !password) {
-        alert("Username dan password wajib diisi");
+    if (!email || !password) {
+        alert("Email dan password wajib diisi");
         return;
     }
 
-    try {
-        const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin", // 🔥 wajib
-            body: JSON.stringify({ username, password }),
-        });
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
 
-        const data = await res.json();
-
-        if (data.success) {
-            closeLogin();
-            authButton.innerText = "Logout";
-            authButton.onclick = logout;
-            await loadOrders();
-        } else {
-            alert("Login gagal");
-        }
-    } catch (err) {
-        console.error("LOGIN ERROR:", err);
-        alert("Terjadi kesalahan saat login");
+    if (error) {
+        alert("Login gagal");
+        return;
     }
+
+    closeLogin();
+    updateAuthUI();
+    await loadOrders();
 }
 
 // ================= LOGOUT =================
 async function logout() {
-    try {
-        await fetch("/api/logout", {
-            method: "POST",
-            credentials: "same-origin",
-        });
-        location.reload();
-    } catch (err) {
-        console.error("LOGOUT ERROR:", err);
-    }
+    await supabase.auth.signOut();
+    location.reload();
 }
 
-// ================= LOAD ORDERS =================
 // ================= LOAD ORDERS =================
 async function loadOrders() {
-    try {
-        const res = await fetch("/api/orders", {
-            method: "GET",
-            credentials: "same-origin",
-        });
 
-        if (res.status !== 200) {
-            console.error("Gagal mengambil data order");
-            return;
-        }
+    const { data: authData, error: authError } = await supabase.auth.getUser();
 
-        const orders = await res.json();
-
-        // Clear tabel
+    if (authError || !authData.user) {
         orderTable.innerHTML = "";
-
-        orders.forEach((order, index) => {
-            orderTable.innerHTML += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${order.tanggal.toString().split("T")[0]}</td>
-                <td>${order.nama_part}</td>
-                <td>${order.jumlah}</td>
-                <td>
-                    <input type="checkbox" ${order.done ? "checked" : ""} 
-                        onchange="toggleDone(${order.id}, this.checked)">
-                </td>
-            </tr>
-            `;
-        });
-    } catch (err) {
-        console.error("LOAD ORDERS ERROR:", err);
+        return;
     }
+
+    const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("id", { ascending: true });
+
+    if (error) {
+        console.error("LOAD ERROR:", error);
+        return;
+    }
+
+    orderTable.innerHTML = "";
+
+    data.forEach((order, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${order.tanggal}</td>
+            <td>${escapeHtml(order.nama_part)}</td>
+            <td>${order.jumlah}</td>
+            <td>
+                <input type="checkbox"
+                    ${order.done ? "checked" : ""}
+            >
+            </td>
+        `;
+
+        const checkbox = row.querySelector("input");
+        checkbox.addEventListener("change", () => {
+            toggleDone(order.id, checkbox.checked);
+        });
+
+        orderTable.appendChild(row);
+    });
 }
 
-// ================= TOGGLE DONE =================
-async function toggleDone(orderId, checked) {
-    try {
-        const res = await fetch("/api/orders/done", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ id: orderId, done: checked }),
-        });
 
-        const data = await res.json();
-        if (!data.success) {
-            alert("Gagal update status order");
-        }
-    } catch (err) {
-        console.error("TOGGLE DONE ERROR:", err);
-    }
-}
 
 // ================= ADD ORDER =================
 async function addOrder() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        alert("Harus login dulu.");
+        openLogin();
+        return;
+    }
+
     const tanggal = document.getElementById("tanggal").value;
     const namaPart = document.getElementById("namaPart").value;
     const jumlah = document.getElementById("jumlah").value;
@@ -130,48 +122,50 @@ async function addOrder() {
         return;
     }
 
-    try {
-        const res = await fetch("/api/orders", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ tanggal, namaPart, jumlah }),
-        });
+    const { error } = await supabase
+        .from("orders")
+        .insert([{ tanggal, nama_part: namaPart, jumlah }]);
 
-        const data = await res.json();
+    if (error) {
+        console.error(error);
+        alert("Gagal menyimpan order");
+        return;
+    }
 
-        if (data.success) {
-            // reload tabel
-            await loadOrders();
+    await loadOrders();
+}
 
-            // reset form
-            document.getElementById("tanggal").value = "";
-            document.getElementById("namaPart").value = "";
-            document.getElementById("jumlah").value = "";
-        } else {
-            alert("Gagal menyimpan order. Pastikan sudah login.");
-        }
-    } catch (err) {
-        console.error("ADD ORDER ERROR:", err);
-        alert("Terjadi kesalahan saat menambahkan order");
+// ================= TOGGLE DONE =================
+async function toggleDone(id, done) {
+    const { error } = await supabase
+        .from("orders")
+        .update({ done })
+        .eq("id", id);
+
+    if (error) {
+        alert("Gagal update status");
     }
 }
 
-// ================= CHECK AUTH ON LOAD =================
-(async function () {
-    try {
-        const res = await fetch("/api/auth", {
-            method: "GET",
-            credentials: "same-origin",
-        });
-        const data = await res.json();
+// ================= AUTH CHECK =================
+async function updateAuthUI() {
+    const { data } = await supabase.auth.getUser();
 
-        if (data.loggedIn) {
-            authButton.innerText = "Logout";
-            authButton.onclick = logout;
-            await loadOrders();
-        }
-    } catch (err) {
-        console.error("AUTH CHECK ERROR:", err);
+    if (data.user) {
+        authButton.innerText = "Logout";
+        authButton.onclick = logout;
+    } else {
+        authButton.innerText = "Login";
+        authButton.onclick = openLogin;
+    }
+}
+
+// ================= INIT =================
+(async function () {
+    await updateAuthUI();
+
+    const { data } = await supabase.auth.getUser();
+    if (data.user) {
+        await loadOrders();
     }
 })();
