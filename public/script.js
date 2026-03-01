@@ -4,10 +4,8 @@ console.log("SCRIPT TERLOAD - SUPABASE MODE");
 const SUPABASE_URL = "https://laocjpezzthwshbxbpmw.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_2wYPYvCUpp2pTDiGo7VqVA_ZfRbjviO";
 
-const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ================= ELEMENT =================
 const modal = document.getElementById("loginModal");
@@ -15,11 +13,15 @@ const authButton = document.getElementById("authButton");
 const orderTable = document.getElementById("orderTable");
 
 // ================= MODAL =================
+
+
 function openLogin() {
-    modal.style.display = "flex";
+    const modal = document.getElementById("loginModal");
+    modal.style.display = "block";
 }
 
 function closeLogin() {
+    const modal = document.getElementById("loginModal");
     modal.style.display = "none";
 }
 
