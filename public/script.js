@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadData() {
 
     const { data, error } = await supabaseClient
-        .from("produksi")
+        .from("orders")
         .select("*")
         .order("id", { ascending: false });
 
@@ -61,7 +61,7 @@ async function addOrder() {
     }
 
     const { error } = await supabaseClient
-        .from("produksi")
+        .from("orders")
         .insert([
             {
                 tanggal: tanggal,
@@ -85,7 +85,7 @@ async function addOrder() {
 async function hapusData(id) {
 
     const { error } = await supabaseClient
-        .from("produksi")
+        .from("orders")
         .delete()
         .eq("id", id);
 
