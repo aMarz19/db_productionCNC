@@ -8,162 +8,96 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_
 
 
 // ================= ELEMENT =================
-const modal = document.getElementById("loginModal");
-const authButton = document.getElementById("authButton");
 const orderTable = document.getElementById("orderTable");
 
-// ================= MODAL =================
+// ===============================
+// LOAD DATA SAAT HALAMAN DIBUKA
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+});
 
+// ===============================
+// AMBIL DATA DARI SUPABASE
+// ===============================
+async function loadData() {
 
-function openLogin() {
-    const modal = document.getElementById("loginModal");
-    modal.style.display = "block";
-}
-
-function closeLogin() {
-    const modal = document.getElementById("loginModal");
-    modal.style.display = "none";
-}
-
-// ================= LOGIN =================
-async function login() {
-
-    const email = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
-
-    if (error) {
-        alert("Login gagal: " + error.message);
-        return;
-    }
-
-    alert("Login berhasil");
-    closeLogin();
-    loadOrders();
-}
-
-// ================= LOGOUT =================
-async function logout() {
-    await supabase.auth.signOut();
-    location.reload();
-}
-
-// ================= LOAD ORDERS =================
-async function loadOrders() {
-
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !authData.user) {
-        orderTable.innerHTML = "";
-        return;
-    }
-
-    const { data, error } = await supabase
-        .from("orders")
+    const { data, error } = await supabaseClient
+        .from("produksi")
         .select("*")
-        .order("id", { ascending: true });
+        .order("id", { ascending: false });
 
     if (error) {
-        console.error("LOAD ERROR:", error);
+        console.error("Error load data:", error.message);
         return;
     }
 
-    orderTable.innerHTML = "";
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
 
-    data.forEach((order, index) => {
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${order.tanggal}</td>
-            <td>${escapeHtml(order.nama_part)}</td>
-            <td>${order.jumlah}</td>
-            <td>
-                <input type="checkbox"
-                    ${order.done ? "checked" : ""}
-            >
-            </td>
+    data.forEach(row => {
+        tableBody.innerHTML += `
+            <tr>
+                <td>${row.tanggal}</td>
+                <td>${row.operator}</td>
+                <td>${row.mesin}</td>
+                <td>${row.qty}</td>
+                <td>
+                    <button onclick="deleteData(${row.id})">Hapus</button>
+                </td>
+            </tr>
         `;
-
-        const checkbox = row.querySelector("input");
-        checkbox.addEventListener("change", () => {
-            toggleDone(order.id, checkbox.checked);
-        });
-
-        orderTable.appendChild(row);
     });
 }
 
-
-
-// ================= ADD ORDER =================
-async function addOrder() {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        alert("Harus login dulu.");
-        openLogin();
-        return;
-    }
+// ===============================
+// TAMBAH DATA
+// ===============================
+async function tambahData() {
 
     const tanggal = document.getElementById("tanggal").value;
-    const namaPart = document.getElementById("namaPart").value;
-    const jumlah = document.getElementById("jumlah").value;
+    const operator = document.getElementById("operator").value;
+    const mesin = document.getElementById("mesin").value;
+    const qty = document.getElementById("qty").value;
 
-    if (!tanggal || !namaPart || !jumlah) {
-        alert("Semua field wajib diisi");
+    if (!tanggal || !operator || !mesin || !qty) {
+        alert("Semua field harus diisi");
         return;
     }
 
-    const { error } = await supabase
-        .from("orders")
-        .insert([{ tanggal, nama_part: namaPart, jumlah }]);
+    const { error } = await supabaseClient
+        .from("produksi")
+        .insert([
+            { tanggal, operator, mesin, qty }
+        ]);
 
     if (error) {
-        console.error(error);
-        alert("Gagal menyimpan order");
+        console.error("Error insert:", error.message);
+        alert("Gagal simpan data");
         return;
     }
 
-    await loadOrders();
+    alert("Data berhasil ditambahkan");
+    loadData();
 }
 
-// ================= TOGGLE DONE =================
-async function toggleDone(id, done) {
-    const { error } = await supabase
-        .from("orders")
-        .update({ done })
+// ===============================
+// HAPUS DATA
+// ===============================
+async function deleteData(id) {
+
+    if (!confirm("Yakin hapus data ini?")) return;
+
+    const { error } = await supabaseClient
+        .from("produksi")
+        .delete()
         .eq("id", id);
 
     if (error) {
-        alert("Gagal update status");
+        console.error("Error delete:", error.message);
+        alert("Gagal hapus data");
+        return;
     }
+
+    loadData();
 }
-
-// ================= AUTH CHECK =================
-async function updateAuthUI() {
-    const { data } = await supabase.auth.getUser();
-
-    if (data.user) {
-        authButton.innerText = "Logout";
-        authButton.onclick = logout;
-    } else {
-        authButton.innerText = "Login";
-        authButton.onclick = openLogin;
-    }
-}
-
-// ================= INIT =================
-(async function () {
-    await updateAuthUI();
-
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-        await loadOrders();
-    }
-})();
