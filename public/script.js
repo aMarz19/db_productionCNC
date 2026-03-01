@@ -2,7 +2,7 @@ console.log("SCRIPT TERLOAD - SUPABASE MODE");
 
 // ================= CONFIG =================
 const SUPABASE_URL = "https://laocjpezzthwshbxbpmw.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_2wYPYvCUpp2pTDiGo7VqVA_ZfRbjviO";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxhb2NqcGV6enRod3NoYnhicG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjY2MjcsImV4cCI6MjA4Nzk0MjYyN30.3Dpk5dT8aqWzfpEoo8omXmUPBm7_6kMgOk0wkoOFJaY";
 
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
