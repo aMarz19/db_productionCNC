@@ -35,6 +35,7 @@ async function loadData() {
     data.forEach(row => {
         tableBody.innerHTML += `
             <tr>
+                <td>${row.id}</td>
                 <td>${row.tanggal}</td>
                 <td>${row.nama_part}</td>
                 <td>${row.jumlah}</td>
@@ -63,7 +64,7 @@ async function addOrder() {
     const { error } = await supabaseClient
         .from("orders")
         .insert([
-            {
+            {   
                 tanggal: tanggal,
                 nama_part: nama_part,
                 jumlah: parseInt(jumlah)
