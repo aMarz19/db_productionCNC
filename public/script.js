@@ -1,8 +1,8 @@
 console.log("SCRIPT TERLOAD - SUPABASE MODE");
 
 // ================= CONFIG =================
-const SUPABASE_URL = "https://PROJECT_ID.supabase.co";
-const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY";
+const SUPABASE_URL = "https://laocjpezzthwshbxbpmw.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_2wYPYvCUpp2pTDiGo7VqVA_ZfRbjviO";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
