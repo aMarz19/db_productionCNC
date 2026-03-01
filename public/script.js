@@ -73,7 +73,7 @@ async function addOrder() {
 
     // 🔥 PANGGIL EDGE FUNCTION
     await fetch(
-        "https://laocjpezzthwshbxbpmw.functions.supabase.co/tele_bot",
+        "https://laocjpezzthwshbxbpmw.supabase.co/functions/v1/tele_bot",
         {
             method: "POST",
             headers: {
