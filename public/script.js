@@ -52,10 +52,10 @@ async function loadData() {
 async function addOrder() {
 
     const tanggal = document.getElementById("tanggal").value;
-    const namaPart = document.getElementById("namaPart").value;
+    const nama_part = document.getElementById("namaPart").value;
     const jumlah = document.getElementById("jumlah").value;
 
-    if (!tanggal || !namaPart || !jumlah) {
+    if (!tanggal || !nama_part || !jumlah) {
         alert("Semua field harus diisi");
         return;
     }
@@ -65,7 +65,7 @@ async function addOrder() {
         .insert([
             {
                 tanggal: tanggal,
-                nama_part: namaPart,
+                nama_part: nama_part,
                 jumlah: parseInt(jumlah)
             }
         ]);
