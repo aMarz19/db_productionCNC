@@ -27,27 +27,23 @@ function closeLogin() {
 
 // ================= LOGIN =================
 async function login() {
+
     const email = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    if (!email || !password) {
-        alert("Email dan password wajib diisi");
-        return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
     });
 
     if (error) {
-        alert("Login gagal");
+        alert("Login gagal: " + error.message);
         return;
     }
 
+    alert("Login berhasil");
     closeLogin();
-    updateAuthUI();
-    await loadOrders();
+    loadOrders();
 }
 
 // ================= LOGOUT =================
