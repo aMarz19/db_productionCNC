@@ -17,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadData();
 });
 
-// ===============================
-// AMBIL DATA DARI SUPABASE
-// ===============================
 async function loadData() {
 
     const { data, error } = await supabaseClient
@@ -28,7 +25,7 @@ async function loadData() {
         .order("id", { ascending: false });
 
     if (error) {
-        console.error("Error load data:", error.message);
+        console.error(error.message);
         return;
     }
 
@@ -39,11 +36,10 @@ async function loadData() {
         tableBody.innerHTML += `
             <tr>
                 <td>${row.tanggal}</td>
-                <td>${row.operator}</td>
-                <td>${row.mesin}</td>
-                <td>${row.qty}</td>
+                <td>${row.nama_part}</td>
+                <td>${row.jumlah}</td>
                 <td>
-                    <button onclick="deleteData(${row.id})">Hapus</button>
+                    <button onclick="hapusData(${row.id})">Hapus</button>
                 </td>
             </tr>
         `;
@@ -56,11 +52,10 @@ async function loadData() {
 async function tambahData() {
 
     const tanggal = document.getElementById("tanggal").value;
-    const operator = document.getElementById("operator").value;
-    const mesin = document.getElementById("mesin").value;
-    const qty = document.getElementById("qty").value;
+    const namaPart = document.getElementById("namaPart").value;
+    const jumlah = document.getElementById("jumlah").value;
 
-    if (!tanggal || !operator || !mesin || !qty) {
+    if (!tanggal || !namaPart || !jumlah) {
         alert("Semua field harus diisi");
         return;
     }
@@ -68,25 +63,26 @@ async function tambahData() {
     const { error } = await supabaseClient
         .from("produksi")
         .insert([
-            { tanggal, operator, mesin, qty }
+            {
+                tanggal: tanggal,
+                nama_part: namaPart,
+                jumlah: parseInt(jumlah)
+            }
         ]);
 
     if (error) {
-        console.error("Error insert:", error.message);
-        alert("Gagal simpan data");
+        console.error(error.message);
+        alert("Gagal simpan");
         return;
     }
 
-    alert("Data berhasil ditambahkan");
     loadData();
 }
 
 // ===============================
 // HAPUS DATA
 // ===============================
-async function deleteData(id) {
-
-    if (!confirm("Yakin hapus data ini?")) return;
+async function hapusData(id) {
 
     const { error } = await supabaseClient
         .from("produksi")
@@ -94,8 +90,8 @@ async function deleteData(id) {
         .eq("id", id);
 
     if (error) {
-        console.error("Error delete:", error.message);
-        alert("Gagal hapus data");
+        console.error(error.message);
+        alert("Gagal hapus");
         return;
     }
 
