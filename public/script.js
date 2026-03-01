@@ -49,7 +49,7 @@ async function loadData() {
 // ===============================
 // TAMBAH DATA
 // ===============================
-async function tambahData() {
+async function addOrder() {
 
     const tanggal = document.getElementById("tanggal").value;
     const namaPart = document.getElementById("namaPart").value;
