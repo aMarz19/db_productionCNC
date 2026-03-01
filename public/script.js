@@ -72,19 +72,23 @@ async function addOrder() {
     }
 
     // 🔥 PANGGIL EDGE FUNCTION
-    await fetch("https://laocjpezzthwshbxbpmw.supabase.co/functions/v1/tele_bot", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "apikey": `${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify({
-            tanggal,
-            nama_part: nama_part,
-            jumlah
-        })
-    }).then(response => response.json())
+    try {
+        await fetch("https://laocjpezzthwshbxbpmw.supabase.co/functions/v1/tele_bot", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "apikey": SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({
+                tanggal,
+                nama_part: nama_part,
+                jumlah
+            })
+        });
+    } catch (err) {
+        console.error("Telegram error:", err);
+    }
 
     loadData();
 }
