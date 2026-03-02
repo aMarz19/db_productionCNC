@@ -29,6 +29,7 @@ async function loadData() {
 
         if (error) throw error;
 
+        // <button onclick="hapusData(${row.id})">Hapus</button>
         const tableBody = document.getElementById("orderTable");
 
         data.forEach(row => {
@@ -39,7 +40,7 @@ async function loadData() {
                 <td>${row.nama_part}</td>
                 <td>${row.jumlah}</td>
                 <td>
-                    <button onclick="hapusData(${row.id})">Hapus</button>
+                    <input type="checkbox" ${row.status ? "checked" : ""} onclick="updateStatus(${row.id}, this.checked)">
                 </td>
             `;
             tableBody.appendChild(tr);
