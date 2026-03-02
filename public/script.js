@@ -96,7 +96,12 @@ async function addOrder() {
         console.error("Telegram error:", err);
     }
 
-    loadData();
+    //add code to show how fast the data is added to the table after insertion in console by time
+    const startTime = performance.now();
+    loadData().then(() => {
+        const endTime = performance.now();
+        console.log(`Data loaded in ${endTime - startTime} milliseconds`);
+    });
 }
 
 // ===============================
