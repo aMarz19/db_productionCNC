@@ -21,40 +21,43 @@ let lastId = 0; // ID terakhir yang sudah ada di tabel
 
 async function loadData() {
     try {
+        // AMBIL SEMUA DATA (Jangan pakai .gt(id) saat pertama kali load halaman)
         const { data, error } = await supabaseClient
             .from("orders")
             .select("*")
-            .gt("id", lastId) // hanya ambil data baru
-            .order("id", { ascending: true }); // ascending supaya muncul di bawah
+            .order("id", { ascending: true });
 
         if (error) throw error;
 
-        // <button onclick="hapusData(${row.id})">Hapus</button>
         const tableBody = document.getElementById("orderTable");
+        tableBody.innerHTML = ""; // KOSONGKAN TABEL agar tidak dobel/salah status
 
-        data.forEach(row => {
+        data.forEach((row, index) => {
             const tr = document.createElement("tr");
             tr.setAttribute("id", `row-${row.id}`);
+
+            // Paksa konversi ke boolean untuk memastikan checked bekerja
+            const isChecked = row.status === true ? "checked" : "";
+
             tr.innerHTML = `
-                <td>${tableBody.rows.length + 1}</td>
+                <td>${index + 1}</td>
                 <td>${row.tanggal}</td>
                 <td>${row.nama_part}</td>
                 <td>${row.jumlah}</td>
                 <td>
-                    <input type="checkbox" ${row.status ? "checked" : ""} onclick="updateStatus(${row.id}, this.checked)">
+                    <input type="checkbox" ${isChecked} 
+                        onclick="updateStatus(${row.id}, this.checked)">
                 </td>
                 <td>
-            <button onclick="editData(${row.id}, '${row.nama_part}', ${row.jumlah}, '${row.tanggal}')" style="color: blue; cursor: pointer; margin-right: 5px;">✏️</button>
-            <button onclick="hapusData(${row.id})" style="color: red; cursor: pointer;">🗑️</button>
-        </td>
+                    <button onclick="editData(${row.id}, '${row.nama_part}', ${row.jumlah})" style="cursor:pointer;">✏️</button>
+                    <button onclick="hapusData(${row.id})" style="color:red; cursor:pointer;">🗑️</button>
+                </td>
             `;
             tableBody.appendChild(tr);
-
-            lastId = row.id; // update lastId supaya next fetch lebih baru
         });
 
     } catch (err) {
-        console.error(err.message);
+        console.error("Error load data:", err.message);
     }
 }
 
