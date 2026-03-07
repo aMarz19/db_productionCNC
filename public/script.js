@@ -37,7 +37,7 @@ async function loadData() {
             tr.setAttribute("id", `row-${row.id}`);
 
             // Paksa konversi ke boolean untuk memastikan checked bekerja
-            const isChecked = row.status === true ? "checked" : "";
+            const isChecked = row.status ? "checked" : "";
 
             tr.innerHTML = `
                 <td>${index + 1}</td>
@@ -104,7 +104,7 @@ async function addOrder() {
         console.error("Telegram error:", err);
     }
 
-    //add code to show how fast the data is added to the table after insertion in console by time
+    //counting time load data
     const startTime = performance.now();
     loadData().then(() => {
         const endTime = performance.now();
@@ -151,8 +151,6 @@ async function updateStatus(id, newStatus) {
         location.reload();
     } else {
         console.log(`Berhasil! ID ${id} sekarang ${newStatus}`);
-        // Opsional: panggil loadData() jika ingin sinkronisasi tanpa refresh
-        loadData(); 
     }
 }
 
