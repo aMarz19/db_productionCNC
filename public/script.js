@@ -141,7 +141,7 @@ async function updateStatus(id, newStatus) {
     try {
         const { error } = await supabaseClient
             .from("orders")
-            .update({ status: newStatus })
+            .update({ done: newStatus })
             .eq("id", id);
 
         if (error) throw error;
