@@ -34,6 +34,7 @@ async function loadData() {
 
         data.forEach(row => {
             const tr = document.createElement("tr");
+            tr.setAttribute("id", `row-${row.id}`);
             tr.innerHTML = `
                 <td>${tableBody.rows.length + 1}</td>
                 <td>${row.tanggal}</td>
@@ -112,35 +113,73 @@ async function addOrder() {
 // HAPUS DATA
 // ===============================
 async function hapusData(id) {
-    if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
+    if (!confirm("Yakin ingin menghapus data ini?")) return;
 
-    const { error } = await supabaseClient
-        .from("orders")
-        .delete()
-        .eq("id", id);
+    try {
+        const { error } = await supabaseClient
+            .from("orders")
+            .delete()
+            .eq("id", id);
 
-    if (error) {
-        alert("Gagal hapus: " + error.message);
-        return;
+        if (error) throw error;
+
+        // Hapus baris dari tabel secara langsung (tanpa reload)
+        const rowElement = document.getElementById(`row-${id}`);
+        if (rowElement) {
+            rowElement.remove();
+            alert("Data berhasil dihapus");
+        }
+    } catch (err) {
+        alert("Gagal hapus: " + err.message);
     }
-
-    // Menghapus baris langsung dari tampilan tanpa reload seluruh tabel
-    const rowElement = document.getElementById(`row-${id}`);
-    if (rowElement) rowElement.remove();
-
-    console.log(`Data dengan ID ${id} berhasil dihapus.`);
 }
 
 // ===============================
-// UPDATE STATUS
+// UPDATE STATUS (CHECKBOX)
 // ===============================
-async function editData(id, namaLama, jumlahLama, tanggalLama) {
-    // Mengambil input baru dari user
-    const namaBaru = prompt("Edit Nama Part:", namaLama);
-    const jumlahBaru = prompt("Edit Jumlah:", jumlahLama);
+async function updateStatus(id, newStatus) {
+    try {
+        const { error } = await supabaseClient
+            .from("orders")
+            .update({ status: newStatus })
+            .eq("id", id);
 
-    // Jika user menekan cancel atau tidak mengisi apapun, batalkan
-    if (namaBaru === null || jumlahBaru === null) return;
+        if (error) throw error;
+        console.log(`ID ${id} status updated to: ${newStatus}`);
+    } catch (err) {
+        alert("Gagal update status: " + err.message);
+        // Refresh jika gagal agar checkbox kembali ke kondisi semula di DB
+        location.reload();
+    }
+}
+
+// ===============================
+// LOGIKA MODAL EDIT
+// ===============================
+
+// 1. Membuka modal dan mengisi data lama ke input
+function editData(id, nama, jumlah) {
+    document.getElementById("editId").value = id;
+    document.getElementById("editNamaPart").value = nama;
+    document.getElementById("editJumlah").value = jumlah;
+    document.getElementById("editModal").style.display = "block";
+}
+
+// 2. Menutup modal
+function closeModal() {
+    document.getElementById("editModal").style.display = "none";
+}
+
+// 3. Menyimpan perubahan ke Supabase
+async function saveEdit() {
+    const id = document.getElementById("editId").value;
+    const namaBaru = document.getElementById("editNamaPart").value;
+    const jumlahBaru = document.getElementById("editJumlah").value;
+
+    if (!namaBaru || !jumlahBaru) {
+        alert("Data tidak boleh kosong!");
+        return;
+    }
 
     const { error } = await supabaseClient
         .from("orders")
@@ -154,7 +193,15 @@ async function editData(id, namaLama, jumlahLama, tanggalLama) {
         alert("Gagal update: " + error.message);
     } else {
         alert("Data berhasil diperbarui!");
-        // Refresh halaman untuk melihat perubahan
-        location.reload();
+        closeModal();
+        location.reload(); // Refresh untuk sinkronisasi data
+    }
+}
+
+// Tambahan: Tutup modal jika user klik di luar area kotak modal
+window.onclick = function (event) {
+    const modal = document.getElementById("editModal");
+    if (event.target == modal) {
+        closeModal();
     }
 }
