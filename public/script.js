@@ -42,6 +42,10 @@ async function loadData() {
                 <td>
                     <input type="checkbox" ${row.status ? "checked" : ""} onclick="updateStatus(${row.id}, this.checked)">
                 </td>
+                <td>
+            <button onclick="editData(${row.id}, '${row.nama_part}', ${row.jumlah}, '${row.tanggal}')" style="color: blue; cursor: pointer; margin-right: 5px;">✏️</button>
+            <button onclick="hapusData(${row.id})" style="color: red; cursor: pointer;">🗑️</button>
+        </td>
             `;
             tableBody.appendChild(tr);
 
@@ -108,6 +112,7 @@ async function addOrder() {
 // HAPUS DATA
 // ===============================
 async function hapusData(id) {
+    if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
 
     const { error } = await supabaseClient
         .from("orders")
@@ -115,10 +120,41 @@ async function hapusData(id) {
         .eq("id", id);
 
     if (error) {
-        console.error(error.message);
-        alert("Gagal hapus");
+        alert("Gagal hapus: " + error.message);
         return;
     }
 
-    loadData();
+    // Menghapus baris langsung dari tampilan tanpa reload seluruh tabel
+    const rowElement = document.getElementById(`row-${id}`);
+    if (rowElement) rowElement.remove();
+
+    console.log(`Data dengan ID ${id} berhasil dihapus.`);
+}
+
+// ===============================
+// UPDATE STATUS
+// ===============================
+async function editData(id, namaLama, jumlahLama, tanggalLama) {
+    // Mengambil input baru dari user
+    const namaBaru = prompt("Edit Nama Part:", namaLama);
+    const jumlahBaru = prompt("Edit Jumlah:", jumlahLama);
+
+    // Jika user menekan cancel atau tidak mengisi apapun, batalkan
+    if (namaBaru === null || jumlahBaru === null) return;
+
+    const { error } = await supabaseClient
+        .from("orders")
+        .update({
+            nama_part: namaBaru,
+            jumlah: parseInt(jumlahBaru)
+        })
+        .eq("id", id);
+
+    if (error) {
+        alert("Gagal update: " + error.message);
+    } else {
+        alert("Data berhasil diperbarui!");
+        // Refresh halaman untuk melihat perubahan
+        location.reload();
+    }
 }
