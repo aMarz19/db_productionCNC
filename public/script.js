@@ -141,18 +141,18 @@ async function hapusData(id) {
 // UPDATE STATUS (CHECKBOX)
 // ===============================
 async function updateStatus(id, newStatus) {
-    try {
-        const { error } = await supabaseClient
-            .from("orders")
-            .update({ done: newStatus })
-            .eq("id", id);
+    const { error } = await supabaseClient
+        .from("orders")
+        .update({ status: newStatus })
+        .eq("id", id);
 
-        if (error) throw error;
-        console.log(`ID ${id} status updated to: ${newStatus}`);
-    } catch (err) {
-        alert("Gagal update status: " + err.message);
-        // Refresh jika gagal agar checkbox kembali ke kondisi semula di DB
+    if (error) {
+        alert("Gagal update status: " + error.message);
         location.reload();
+    } else {
+        console.log(`Berhasil! ID ${id} sekarang ${newStatus}`);
+        // Opsional: panggil loadData() jika ingin sinkronisasi tanpa refresh
+        loadData(); 
     }
 }
 
