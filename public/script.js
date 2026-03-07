@@ -69,6 +69,7 @@ async function addOrder() {
     const tanggal = document.getElementById("tanggal").value;
     const nama_part = document.getElementById("namaPart").value;
     const jumlah = document.getElementById("jumlah").value;
+    const status = false; // Default status saat tambah data baru
 
     const { error } = await supabaseClient
         .from("orders")
@@ -77,7 +78,7 @@ async function addOrder() {
                 tanggal: tanggal,
                 nama_part: nama_part,
                 jumlah: parseInt(jumlah),
-                done: false
+                status: status
             }
         ]);
 
