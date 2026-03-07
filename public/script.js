@@ -71,6 +71,11 @@ async function addOrder() {
     const jumlah = document.getElementById("jumlah").value;
     const status = false; // Default status saat tambah data baru
 
+    if (!tanggal || !nama_part || !jumlah) {
+        alert("Semua field harus diisi!");
+        return;
+    }
+
     const { error } = await supabaseClient
         .from("orders")
         .insert([
@@ -145,7 +150,7 @@ async function hapusData(id) {
 async function updateStatus(id, newStatus) {
     const { error } = await supabaseClient
         .from("orders")
-        .update({ done: newStatus })
+        .update({ status: newStatus })
         .eq("id", id);
 
     if (error) {

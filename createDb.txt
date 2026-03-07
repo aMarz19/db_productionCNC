@@ -1,0 +1,13 @@
+CREATE TABLE orders (
+
+id BIGSERIAL PRIMARY KEY,
+
+tanggal DATE NOT NULL,
+
+nama_part TEXT NOT NULL,
+
+jumlah INTEGER NOT NULL CHECK (jumlah > 0),
+
+status BOOLEAN NOT NULL DEFAULT false
+
+);
