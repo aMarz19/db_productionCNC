@@ -143,7 +143,7 @@ async function hapusData(id) {
 async function updateStatus(id, newStatus) {
     const { error } = await supabaseClient
         .from("orders")
-        .update({ status: newStatus })
+        .update({ done: newStatus })
         .eq("id", id);
 
     if (error) {
