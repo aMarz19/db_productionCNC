@@ -76,7 +76,8 @@ async function addOrder() {
             {
                 tanggal: tanggal,
                 nama_part: nama_part,
-                jumlah: parseInt(jumlah)
+                jumlah: parseInt(jumlah),
+                done: false
             }
         ]);
 
