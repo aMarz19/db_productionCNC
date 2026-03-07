@@ -37,6 +37,21 @@
 
     </div>
 
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Data Produksi</h3>
+            <input type="hidden" id="editId">
+            <label>Nama Part:</label>
+            <input type="text" id="editNamaPart">
+            <label>Jumlah:</label>
+            <input type="number" id="editJumlah">
+            <div class="modal-buttons">
+                <button onclick="saveEdit()" class="btn-save">Simpan Perubahan</button>
+                <button onclick="closeModal()" class="btn-cancel">Batal</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
