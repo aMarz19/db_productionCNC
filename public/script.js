@@ -1,14 +1,10 @@
-console.log("SCRIPT TERLOAD - SUPABASE MODE");
+console.log("TEST SCRIPT.JS");
 
 // ================= CONFIG =================
 const SUPABASE_URL = "https://laocjpezzthwshbxbpmw.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxhb2NqcGV6enRod3NoYnhicG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjY2MjcsImV4cCI6MjA4Nzk0MjYyN30.3Dpk5dT8aqWzfpEoo8omXmUPBm7_6kMgOk0wkoOFJaY";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-
-// ================= ELEMENT =================
-const orderTable = document.getElementById("orderTable");
 
 // ===============================
 // LOAD DATA SAAT HALAMAN DIBUKA
@@ -21,7 +17,6 @@ let lastId = 0; // ID terakhir yang sudah ada di tabel
 
 async function loadData() {
     try {
-        // AMBIL SEMUA DATA (Jangan pakai .gt(id) saat pertama kali load halaman)
         const { data, error } = await supabaseClient
             .from("orders")
             .select("*")
@@ -30,13 +25,13 @@ async function loadData() {
         if (error) throw error;
 
         const tableBody = document.getElementById("orderTable");
-        tableBody.innerHTML = ""; // KOSONGKAN TABEL agar tidak dobel/salah status
+        tableBody.innerHTML = "";
 
         data.forEach((row, index) => {
             const tr = document.createElement("tr");
             tr.setAttribute("id", `row-${row.id}`);
 
-            // Paksa konversi ke boolean untuk memastikan checked bekerja
+
             const isChecked = row.status ? "checked" : "";
 
             tr.innerHTML = `
@@ -138,6 +133,7 @@ async function hapusData(id) {
         if (rowElement) {
             rowElement.remove();
             alert("Data berhasil dihapus");
+            location.reload();
         }
     } catch (err) {
         alert("Gagal hapus: " + err.message);
@@ -158,6 +154,7 @@ async function updateStatus(id, newStatus) {
         location.reload();
     } else {
         console.log(`Berhasil! ID ${id} sekarang ${newStatus}`);
+        location.reload();
     }
 }
 
