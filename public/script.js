@@ -70,6 +70,12 @@ async function addOrder() {
         alert("Semua field harus diisi!");
         return;
     }
+    
+    // Validasi jumlah harus angka positif
+    if(isNaN(jumlah) || parseInt(jumlah) <= 0) {
+        alert("Jumlah harus berupa angka positif!");
+        return;
+    }
 
     const { error } = await supabaseClient
         .from("orders")
