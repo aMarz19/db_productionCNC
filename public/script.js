@@ -51,6 +51,35 @@ async function loadData() {
             tableBody.appendChild(tr);
         });
 
+        // ===============================
+        // TABEL STOK
+        // ===============================
+        const stokMap = {};
+        data.filter(row => row.nama_part.toLowerCase().includes("stock"))
+            .forEach(row => {
+                const key = row.nama_part;
+                stokMap[key] = (stokMap[key] || 0) + row.jumlah;
+            });
+
+        const stokTable = document.getElementById("stokTable");
+        stokTable.innerHTML = "";
+
+        const stokKeys = Object.keys(stokMap);
+
+        if (stokKeys.length === 0) {
+            stokTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6b7280; padding:20px;">Belum ada data stok</td></tr>`;
+        } else {
+            stokKeys.forEach((key, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${key}</td>
+            <td>${stokMap[key]} unit</td>
+        `;
+                stokTable.appendChild(tr);
+            });
+        }
+
     } catch (err) {
         console.error("Error load data:", err.message);
     }
@@ -70,9 +99,9 @@ async function addOrder() {
         alert("Semua field harus diisi!");
         return;
     }
-    
+
     // Validasi jumlah harus angka positif
-    if(isNaN(jumlah) || parseInt(jumlah) <= 0) {
+    if (isNaN(jumlah) || parseInt(jumlah) <= 0) {
         alert("Jumlah harus berupa angka positif!");
         return;
     }
@@ -216,3 +245,4 @@ window.onclick = function (event) {
         closeModal();
     }
 }
+
