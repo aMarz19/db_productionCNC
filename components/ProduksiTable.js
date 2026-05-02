@@ -1,4 +1,4 @@
-const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading }) => {
+const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading, isAdmin = false }) => {
     if (isLoading) {
         return (
             <section className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
@@ -63,26 +63,34 @@ const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading }) 
                                             ⏳ Proses
                                         </span>
                                     )}
-                                    <input
-                                        type="checkbox"
-                                        checked={order.status}
-                                        onChange={(e) => onStatusChange(order.id, e.target.checked)}
-                                        className="ml-2 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-                                    />
+                                    {isAdmin && (
+                                        <input
+                                            type="checkbox"
+                                            checked={order.status}
+                                            onChange={(e) => onStatusChange(order.id, e.target.checked)}
+                                            className="ml-2 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    )}
                                 </td>
                                 <td className="px-6 py-4 text-center">
-                                    <button
-                                        onClick={() => onEdit(order)}
-                                        className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all mr-2"
-                                    >
-                                        ✏️ Edit
-                                    </button>
-                                    <button
-                                        onClick={() => onDelete(order.id)}
-                                        className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all"
-                                    >
-                                        🗑️ Hapus
-                                    </button>
+                                    {isAdmin ? (
+                                        <>
+                                            <button
+                                                onClick={() => onEdit(order)}
+                                                className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all mr-2"
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button
+                                                onClick={() => onDelete(order.id)}
+                                                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all"
+                                            >
+                                                🗑️ Hapus
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <span className="text-sm text-gray-500">Akses terbatas</span>
+                                    )}
                                 </td>
                             </tr>
                         ))}

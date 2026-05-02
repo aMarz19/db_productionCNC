@@ -10,8 +10,10 @@ const ToolsMillingPage = () => {
     const [tools, setTools] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editData, setEditData] = useState(null);
+    const [session, setSession] = useState(null);
 
     useEffect(() => {
+        setSession(getUserSession());
         loadTools();
     }, [activeTab]);
 
@@ -105,15 +107,21 @@ const ToolsMillingPage = () => {
             </div>
 
             {/* Add Button */}
-            <button
-                onClick={() => {
-                    setEditData(null);
-                    setIsModalOpen(true);
-                }}
-                className="mb-4 px-4 py-2 bg-linear-to-r from-blue-500 to-cyan-500 text-white rounded-lg"
-            >
-                ➕ Add Tool
-            </button>
+            {session?.is_admin ? (
+                <button
+                    onClick={() => {
+                        setEditData(null);
+                        setIsModalOpen(true);
+                    }}
+                    className="mb-4 px-4 py-2 bg-linear-to-r from-blue-500 to-cyan-500 text-white rounded-lg"
+                >
+                    ➕ Add Tool
+                </button>
+            ) : (
+                <div className="mb-4 p-4 rounded-lg bg-white shadow-sm border border-gray-200 text-gray-600 hidden">
+                    Login sebagai admin untuk menambah, mengedit, atau menghapus tools.
+                </div>
+            )}
 
             {/* Table */}
             <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -137,18 +145,24 @@ const ToolsMillingPage = () => {
                                 <td className="p-3">{tool.insert_type}</td>
                                 <td className="p-3 text-center">{tool.insert_qty}</td>
                                 <td className="p-3 text-center">
-                                    <button
-                                        onClick={() => handleEdit(tool)}
-                                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded mr-2"
-                                    >
-                                        ✏️
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(tool.id)}
-                                        className="px-3 py-1 bg-red-100 text-red-700 rounded"
-                                    >
-                                        🗑️
-                                    </button>
+                                    {session?.is_admin ? (
+                                        <>
+                                            <button
+                                                onClick={() => handleEdit(tool)}
+                                                className="px-3 py-1 bg-blue-100 text-blue-700 rounded mr-2"
+                                            >
+                                                ✏️
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(tool.id)}
+                                                className="px-3 py-1 bg-red-100 text-red-700 rounded"
+                                            >
+                                                🗑️
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <span className="text-sm text-gray-500">Terbatas</span>
+                                    )}
                                 </td>
                             </tr>
                         ))}

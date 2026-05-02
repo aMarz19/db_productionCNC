@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import ProtectedRoute from '@/components/ProtectedRoute';
 import EditModal from '@/components/EditModal';
 import FormInput from '@/components/FormInput';
 import ProduksiTable from '@/components/ProduksiTable';
@@ -21,9 +20,11 @@ const ProduksiPage = () => {
     const [stokData, setStokData] = useState({});
     const [editModalData, setEditModalData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [session, setSession] = useState(null);
 
     // Load data saat komponen mount
     useEffect(() => {
+        setSession(getUserSession());
         loadData();
     }, []);
 
@@ -245,6 +246,7 @@ const ProduksiPage = () => {
 
     return (
 
+
         <div className="min-h-screen bg-gray-50 p-8 ml-64">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
@@ -254,7 +256,13 @@ const ProduksiPage = () => {
                 </div>
 
                 {/* Form Input */}
-                <FormInput onSubmit={addOrder} />
+                {session?.is_admin ? (
+                    <FormInput onSubmit={addOrder} />
+                ) : (
+                    <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100 text-gray-600 hidden">
+                        <p className="font-medium">Login sebagai admin untuk menambahkan, mengedit, atau menghapus data.</p>
+                    </div>
+                )}
 
                 {/* Stats Cards */}
                 <StatsCards stats={stats} />
@@ -269,6 +277,7 @@ const ProduksiPage = () => {
                     onDelete={hapusData}
                     onStatusChange={updateStatus}
                     isLoading={isLoading}
+                    isAdmin={session?.is_admin}
                 />
 
                 {/* Edit Modal */}

@@ -1,6 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
+import InputField from '@/components/ui/InputField';
+import Button from '@/components/ui/Button';
 
 const FormInput = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -24,56 +26,41 @@ const FormInput = ({ onSubmit }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tanggal Produksi
-          </label>
-          <input
-            type="date"
-            value={formData.tanggal}
-            onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-        </div>
+        <InputField
+          id="tanggal-produksi"
+          label="Tanggal Produksi"
+          type="date"
+          value={formData.tanggal}
+          onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Nama Part
-          </label>
-          <input
-            type="text"
-            value={formData.nama_part}
-            onChange={(e) => setFormData({ ...formData, nama_part: e.target.value })}
-            placeholder="Masukkan nama part"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-        </div>
+        <InputField
+          id="nama-part"
+          label="Nama Part"
+          type="text"
+          value={formData.nama_part}
+          placeholder="Masukkan nama part"
+          onChange={(e) => setFormData({ ...formData, nama_part: e.target.value })}
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Jumlah Unit
-          </label>
-          <input
-            type="number"
-            value={formData.jumlah}
-            onChange={(e) => setFormData({ ...formData, jumlah: e.target.value })}
-            placeholder="0"
-            min="1"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-        </div>
+        <InputField
+          id="jumlah-unit"
+          label="Jumlah Unit"
+          type="number"
+          value={formData.jumlah}
+          placeholder="0"
+          min="1"
+          onChange={(e) => setFormData({ ...formData, jumlah: e.target.value })}
+        />
 
         <div className="flex items-end">
-          <button
-            onClick={handleSubmit}
-            className="w-full px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-          >
+          <Button type="button" fullWidth onClick={handleSubmit}>
             💾 Simpan Data
-          </button>
+          </Button>
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default FormInput;
