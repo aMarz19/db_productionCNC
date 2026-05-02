@@ -47,7 +47,7 @@ const Sidebar = () => {
             )}
 
             <aside
-                className={`fixed inset-y-0 left-0 z-40 flex h-screen flex-col overflow-y-auto bg-white border-r border-gray-200 p-6 shadow-lg transition-all duration-300 transform ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 w-64 ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}>
+                className={`fixed inset-y-0 left-0 z-40 flex h-screen flex-col overflow-y-auto bg-white border-r border-gray-200 p-6 shadow-lg transition-all duration-300 transform ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:h-auto md:flex-shrink-0 w-64 ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}>
                 <div className="flex items-center justify-between gap-3 mb-8">
                     <Link
                         href="/"
@@ -87,8 +87,8 @@ const Sidebar = () => {
                                 setIsAuthOpen(true);
                                 setMobileOpen(false);
                             }}
-                            className="w-full rounded-xl bg-linear-to-r from-blue-500 to-cyan-500 text-white py-3 font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg">
-                            🔐 Login
+                            className={`w-full rounded-xl bg-linear-to-r from-blue-500 to-cyan-500 text-white font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg ${isCollapsed ? 'py-3 px-0' : 'py-3 px-4'}`}>
+                            {isCollapsed ? '🔐' : '🔐 Login'}
                         </button>
                     ) : (
                         <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 shadow-sm">
