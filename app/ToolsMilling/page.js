@@ -26,7 +26,6 @@ const ToolsMillingPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa menambah/edit tool!');
             return;
         }
 
@@ -57,7 +56,6 @@ const ToolsMillingPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa menghapus tool!');
             return;
         }
 
@@ -76,7 +74,6 @@ const ToolsMillingPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa edit tool!');
             return;
         }
 
@@ -85,7 +82,7 @@ const ToolsMillingPage = () => {
     }
 
     return (
-        <main className="ml-64 p-8 bg-linear-to-br from-blue-50 via-cyan-50 to-indigo-50 min-h-screen">
+        <main className="p-8 bg-linear-to-br from-blue-50 via-cyan-50 to-indigo-50 min-h-screen">
             <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-6">
                 Tools Milling
             </h1>
@@ -124,8 +121,8 @@ const ToolsMillingPage = () => {
             )}
 
             {/* Table */}
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-                <table className="w-full">
+            <div className="overflow-x-auto bg-white rounded-xl p-6 shadow-lg">
+                <table className="w-full min-w-[720px]">
                     <thead>
                         <tr className="bg-gray-100">
                             <th className="p-3 text-left">Nama Item</th>

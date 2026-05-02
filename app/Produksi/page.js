@@ -60,15 +60,17 @@ const ProduksiPage = () => {
 
         // Produksi Bulan Ini
         const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
 
-        const bulanIni = data
-            .filter(row => {
-                const tanggal = new Date(row.tanggal);
-                return tanggal >= startOfMonth && tanggal <= endOfMonth;
-            })
-            .reduce((sum, row) => sum + (row.jumlah || 0), 0);
+        const bulanIni = data.reduce((sum, row) => {
+            const tanggal = row?.tanggal ? new Date(row.tanggal) : null;
+            if (!tanggal || Number.isNaN(tanggal.getTime())) return sum;
+            if (tanggal.getMonth() === currentMonth && tanggal.getFullYear() === currentYear) {
+                return sum + (row.jumlah || 0);
+            }
+            return sum;
+        }, 0);
 
         setStats({ totalProduksi, totalJenis, bulanIni });
     }
@@ -88,7 +90,6 @@ const ProduksiPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa menambah data!');
             return;
         }
 
@@ -145,7 +146,6 @@ const ProduksiPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa menghapus data!');
             return;
         }
 
@@ -171,7 +171,6 @@ const ProduksiPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa mengubah status!');
             return;
         }
 
@@ -196,7 +195,6 @@ const ProduksiPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa mengedit data!');
             return;
         }
 
@@ -213,7 +211,6 @@ const ProduksiPage = () => {
         const session = getUserSession();
 
         if (!session?.is_admin) {
-            alert('❌ Hanya admin yang bisa mengedit data!');
             return;
         }
 
@@ -247,7 +244,7 @@ const ProduksiPage = () => {
     return (
 
 
-        <div className="min-h-screen bg-gray-50 p-8 ml-64">
+        <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
