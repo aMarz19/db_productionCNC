@@ -128,7 +128,7 @@ const ToolsMillingPage = () => {
                     <h2 className="text-lg font-semibold text-gray-900">Daftar Tools</h2>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[720px]">
+                    <table className="w-full min-w-180">
                     <thead>
                         <tr className="bg-gray-100">
                             <th className="p-3 text-left">Nama Item</th>
