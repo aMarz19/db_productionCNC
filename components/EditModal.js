@@ -29,7 +29,7 @@ const EditModal = ({ data, onSave, onClose }) => {
   };
 
   return (
-    <Modal isOpen={!!data} title="✏️ Edit Data Produksi" onClose={onClose}>
+    <Modal isOpen={!!data} title="Edit Data Produksi" onClose={onClose}>
       <div className="space-y-4">
         <InputField
           id="edit-tanggal"
@@ -57,10 +57,10 @@ const EditModal = ({ data, onSave, onClose }) => {
 
         <div className="flex gap-3 pt-4">
           <Button type="button" onClick={handleSave} className="flex-1">
-            💾 Simpan
+            Simpan
           </Button>
           <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
-            ❌ Batal
+            Batal
           </Button>
         </div>
       </div>

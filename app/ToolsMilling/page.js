@@ -82,19 +82,21 @@ const ToolsMillingPage = () => {
     }
 
     return (
-        <main className="p-8 bg-linear-to-br from-blue-50 via-cyan-50 to-indigo-50 min-h-screen">
-            <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-6">
-                Tools Milling
-            </h1>
+        <main className="min-h-screen bg-gray-50 p-8">
+            <div className="max-w-7xl mx-auto space-y-8">
+                <div className="mb-4">
+                    <h1 className="text-3xl font-semibold text-gray-900">Tools Milling</h1>
+                    <p className="text-sm text-gray-600 mt-1">Kelola inventaris tools CNC dengan tampilan yang lebih sederhana.</p>
+                </div>
 
-            {/* Tabs */}
-            <div className="flex gap-2 mb-6">
+                {/* Tabs */}
+                <div className="flex flex-wrap gap-2 mb-6">
                 {['endmill', 'drill', 'tap', 'holder'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2 rounded-lg font-medium ${activeTab === tab
-                            ? 'bg-linear-to-r from-blue-500 to-cyan-500 text-white'
+                            ? 'bg-blue-600 text-white'
                             : 'bg-white text-gray-700 border'
                             }`}
                     >
@@ -110,9 +112,9 @@ const ToolsMillingPage = () => {
                         setEditData(null);
                         setIsModalOpen(true);
                     }}
-                    className="mb-4 px-4 py-2 bg-linear-to-r from-blue-500 to-cyan-500 text-white rounded-lg"
+                    className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
                 >
-                    ➕ Add Tool
+                    Tambah Tool
                 </button>
             ) : (
                 <div className="mb-4 p-4 rounded-lg bg-white shadow-sm border border-gray-200 text-gray-600 hidden">
@@ -121,8 +123,12 @@ const ToolsMillingPage = () => {
             )}
 
             {/* Table */}
-            <div className="overflow-x-auto bg-white rounded-xl p-6 shadow-lg">
-                <table className="w-full min-w-[720px]">
+            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div className="mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900">Daftar Tools</h2>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full min-w-[720px]">
                     <thead>
                         <tr className="bg-gray-100">
                             <th className="p-3 text-left">Nama Item</th>
@@ -135,28 +141,28 @@ const ToolsMillingPage = () => {
                     </thead>
                     <tbody>
                         {tools.map((tool) => (
-                            <tr key={tool.id} className="border-t hover:bg-blue-50">
+                            <tr key={tool.id} className="border-t hover:bg-gray-50">
                                 <td className="p-3">{tool.nama_item}</td>
                                 <td className="p-3">{tool.tipe}</td>
-                                <td className="p-3 text-center font-semibold">{tool.jumlah}</td>
+                                <td className="p-3 text-center font-semibold text-gray-900">{tool.jumlah}</td>
                                 <td className="p-3">{tool.insert_type}</td>
                                 <td className="p-3 text-center">{tool.insert_qty}</td>
                                 <td className="p-3 text-center">
                                     {session?.is_admin ? (
-                                        <>
+                                        <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => handleEdit(tool)}
-                                                className="px-3 py-1 bg-blue-100 text-blue-700 rounded mr-2"
+                                                className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-all"
                                             >
-                                                ✏️
+                                                Edit
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(tool.id)}
-                                                className="px-3 py-1 bg-red-100 text-red-700 rounded"
+                                                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-all"
                                             >
-                                                🗑️
+                                                Hapus
                                             </button>
-                                        </>
+                                        </div>
                                     ) : (
                                         <span className="text-sm text-gray-500">Terbatas</span>
                                     )}
@@ -166,6 +172,7 @@ const ToolsMillingPage = () => {
                     </tbody>
                 </table>
             </div>
+            </section>
 
             <ToolModal
                 isOpen={isModalOpen}
@@ -177,6 +184,7 @@ const ToolsMillingPage = () => {
                 kategori={activeTab}
                 editData={editData}
             />
+            </div>
         </main>
     );
 };

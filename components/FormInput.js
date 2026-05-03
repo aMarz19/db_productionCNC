@@ -17,12 +17,10 @@ const FormInput = ({ onSubmit }) => {
   };
 
   return (
-    <section className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-          <span className="text-xl">➕</span>
-        </div>
-        <h3 className="text-xl font-bold text-gray-800">Tambah Data Produksi</h3>
+    <section className="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm">
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-gray-900">Tambah Data Produksi</h3>
+        <p className="text-sm text-gray-500 mt-1">Masukkan informasi produksi terbaru.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -55,7 +53,7 @@ const FormInput = ({ onSubmit }) => {
 
         <div className="flex items-end">
           <Button type="button" fullWidth onClick={handleSubmit}>
-            💾 Simpan Data
+            Simpan Data
           </Button>
         </div>
       </div>

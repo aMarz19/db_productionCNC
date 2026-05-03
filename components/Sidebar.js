@@ -7,7 +7,8 @@ import { getUserSession, clearUserSession } from "@/lib/auth";
 
 const navItems = [
     { href: "/Produksi", label: "Produksi", icon: "📦" },
-    { href: "/ToolsMilling", label: "Tools Milling", icon: "🔧" }
+    { href: "/ToolsMilling", label: "Tools Milling", icon: "🔧" },
+    { href: "/ToolsLathe", label: "Tools Lathe", icon: "🛠️" }
 ];
 
 const Sidebar = () => {
@@ -47,7 +48,7 @@ const Sidebar = () => {
             )}
 
             <aside
-                className={`fixed inset-y-0 left-0 z-40 flex h-screen flex-col overflow-y-auto bg-white border-r border-gray-200 p-6 shadow-lg transition-all duration-300 transform ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:h-auto md:flex-shrink-0 w-64 ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}>
+                className={`fixed inset-y-0 left-0 z-40 flex h-screen flex-col overflow-y-auto bg-white border-r border-gray-200 p-6 shadow-lg transition-all duration-300 transform ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:h-auto md:shrink-0 w-64 ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}>
                 <div className="flex items-center justify-between gap-3 mb-8">
                     <Link
                         href="/"

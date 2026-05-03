@@ -218,14 +218,53 @@ const ToolModal = ({ isOpen, onClose, onSave, kategori, editData = null }) => {
         );
 
       default:
-        return null;
+        return (
+          <>
+            <InputField
+              id="tool-nama"
+              label="Nama Tool"
+              type="text"
+              value={formData.nama_item}
+              onChange={(e) => setFormData({ ...formData, nama_item: e.target.value })}
+              required
+            />
+
+            <InputField
+              id="tool-jumlah"
+              label="Jumlah"
+              type="number"
+              min="0"
+              value={formData.jumlah}
+              onChange={(e) => setFormData({ ...formData, jumlah: parseInt(e.target.value) || 0 })}
+              required
+            />
+
+            <InputField
+              id="tool-insert-type"
+              label="Insert Type (Opsional)"
+              type="text"
+              value={formData.insert_type}
+              onChange={(e) => setFormData({ ...formData, insert_type: e.target.value })}
+              placeholder="APMT 1135, - jika tidak ada"
+            />
+
+            <InputField
+              id="tool-insert-qty"
+              label="Insert Qty (Opsional)"
+              type="number"
+              min="0"
+              value={formData.insert_qty}
+              onChange={(e) => setFormData({ ...formData, insert_qty: parseInt(e.target.value) || 0 })}
+            />
+          </>
+        );
     }
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      title={`${editData ? '✏️ Edit' : '➕ Add'} ${kategori.charAt(0).toUpperCase() + kategori.slice(1)}`}
+      title={`${editData ? 'Edit' : 'Tambah'} ${kategori.charAt(0).toUpperCase() + kategori.slice(1)}`}
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -233,10 +272,10 @@ const ToolModal = ({ isOpen, onClose, onSave, kategori, editData = null }) => {
 
         <div className="flex gap-3 pt-4">
           <Button type="submit" className="flex-1">
-            {editData ? '💾 Update' : '✅ Simpan'}
+            {editData ? 'Update' : 'Simpan'}
           </Button>
           <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
-            ❌ Batal
+            Batal
           </Button>
         </div>
       </form>

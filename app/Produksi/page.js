@@ -242,14 +242,12 @@ const ProduksiPage = () => {
     }
 
     return (
-
-
         <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto space-y-8">
                 {/* Header */}
-                <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-800">Dashboard Produksi</h2>
-                    <p className="text-gray-600 mt-1">Kelola data produksi CNC Anda</p>
+                <div className="mb-4">
+                    <h2 className="text-3xl font-semibold text-gray-900">Produksi</h2>
+                    <p className="text-sm text-gray-600 mt-1">Kelola data produksi CNC Anda dengan tampilan sederhana.</p>
                 </div>
 
                 {/* Form Input */}

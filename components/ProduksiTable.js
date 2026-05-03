@@ -8,14 +8,9 @@ const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading, is
     }
 
     return (
-        <section className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                        <span className="text-xl">📋</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-800">Data Produksi</h3>
-                </div>
+        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">Data Produksi</h3>
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-gray-200">
@@ -55,12 +50,12 @@ const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading, is
                                 </td>
                                 <td className="px-6 py-4 text-center">
                                     {order.status ? (
-                                        <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            ✓ Selesai
+                                        <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+                                            Selesai
                                         </span>
                                     ) : (
-                                        <span className="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            ⏳ Proses
+                                        <span className="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
+                                            Proses
                                         </span>
                                     )}
                                     {isAdmin && (
@@ -79,13 +74,13 @@ const ProduksiTable = ({ orders, onEdit, onDelete, onStatusChange, isLoading, is
                                                 onClick={() => onEdit(order)}
                                                 className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all mr-2"
                                             >
-                                                ✏️ Edit
+                                                Edit
                                             </button>
                                             <button
                                                 onClick={() => onDelete(order.id)}
                                                 className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all"
                                             >
-                                                🗑️ Hapus
+                                                Hapus
                                             </button>
                                         </>
                                     ) : (
